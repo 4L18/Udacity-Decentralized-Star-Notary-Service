@@ -65,6 +65,37 @@ contract('StarNotary', async (accs) => {
 
   // Write Tests for:
 
-// 1) The token name and token symbol are added properly.
-// 2) 2 users can exchange their stars.
-// 3) Stars Tokens can be transferred from one address to another.
+  // 1) The token name and token symbol are added properly.
+  it('can add the star name and star symbol properly', async() => {
+    assert.equal(await instance.name.call(), "Nut Token");
+    assert.equal(await instance.symbol.call(), "NUT");
+  });
+
+  // 2) 2 users can exchange their stars.
+  it('lets 2 users exchange stars', async() => {
+    let user1 = accounts[1]
+    let user2 = accounts[2]
+
+    let starIdA = 6
+    let starAPrice = web3.toWei(.01, "ether")
+    await instance.createStar('star A', starIdA, {from: user1})
+
+    let starIdB = 7
+    let starBPrice = web3.toWei(.01, "ether")
+    await instance.createStar('star B', starIdB, {from: user2})
+
+    await instance.exchangeStars(starIdA, starIdB)
+    assert.equal(await instance.ownerOf.call(starIdA), user2)
+    assert.equal(await instance.ownerOf.call(starIdB), user1)
+  });
+
+  // 3) Stars Tokens can be transferred from one address to another.
+  it('lets a user transfer a star', async() => {
+    let user1 = accounts[1]
+    let user2 = accounts[2]
+    let starId = 8
+    await instance.createStar('star C', starId, {from: user1})
+    assert.equal(await instance.ownerOf.call(starId), user1)
+    await instance.transferStar(user2, starId, {from: user1})
+    assert.equal(await instance.ownerOf.call(starId), user2)
+  });
