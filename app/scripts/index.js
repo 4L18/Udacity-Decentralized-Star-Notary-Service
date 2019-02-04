@@ -68,8 +68,8 @@ const App = {
     createStar();
   },
   
-  lookupStar: function () {
-    lookupStar();
+  lookUp: function () {
+    lookUp();
   }
 }
 
