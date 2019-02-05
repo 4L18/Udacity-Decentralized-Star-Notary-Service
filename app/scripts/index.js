@@ -29,7 +29,7 @@ const createStar = async () => {
 const lookUp = async () => {
   const instance = await StarNotary.deployed();
   const id = document.getElementById("searchStarId").value;
-  let name = await instance.lookUptokenIdToStarInfo(id);
+  let name = await instance.lookUptokenIdToStarInfo.call(id, {from: account});
   App.setStatus("Star name is " + name + ".");
 }
 //
